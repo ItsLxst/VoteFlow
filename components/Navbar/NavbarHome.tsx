@@ -1,9 +1,9 @@
 import Image from "next/image";
 
-export default function NavbarHome() {
+function NavbarHome() {
     return (
-        <nav className="w-full border-b border-gray-200 flex justify-center py-4">
-            <div className="w-full max-w-5xl flex items-center justify-between px-4">
+        <nav className="w-full border-b border-gray-200 py-4">
+            <div className="w-full max-w-4xl mx-auto flex items-center justify-between px-4">
                 <div className="flex items-center gap-2.5">
                     <Image
                         src="/logo.svg"
@@ -21,3 +21,5 @@ export default function NavbarHome() {
         </nav>
     );
 }
+
+export default NavbarHome;
