@@ -3,7 +3,7 @@ import Image from "next/image";
 function NavbarDetail() {
     return (
         <nav className="w-full border-b border-gray-200 py-4">
-            <div className="w-full max-w-4xl mx-auto flex items-center gap-3 px-4">
+            <div className="w-full max-w-2xl mx-auto flex items-center gap-3 px-4">
                 <button className="hover:text-black cursor-pointer text-stone-500 text-sm font-medium">
                     ← Back
                 </button>
