@@ -43,3 +43,10 @@ next-env.d.ts
 .idea/
 AGENTS.md
 CLAUDE.md
+/app/generated/prisma
+
+# AI & Editor files
+.agents
+.claude
+.windsurf
+skills-lock.json
