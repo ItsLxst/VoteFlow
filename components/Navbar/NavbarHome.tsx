@@ -5,6 +5,8 @@ import SubmitIdeaModal from "@/components/SubmitIdeaModal/SubmitIdeaModal";
 
 function NavbarHome() {
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const closeModal = () => setIsModalOpen(false);
+
     return (
         <nav className="w-full border-b border-gray-200 py-4">
             <div className="w-full max-w-4xl mx-auto flex items-center justify-between px-4">
@@ -22,7 +24,7 @@ function NavbarHome() {
                     + Submit Idea
                 </button>
             </div>
-            {isModalOpen && <SubmitIdeaModal />}
+            {isModalOpen && <SubmitIdeaModal onClose={closeModal} />}
         </nav>
     );
 }

@@ -1,6 +1,6 @@
 import {createPost} from "@/app/actions/postActions";
 
-export default function SubmitIdeaModal() {
+export default function SubmitIdeaModal({ onClose }: { onClose: () => void } ) {
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-black/30 backdrop-blur-sm">
             <div className="w-full max-w-lg rounded-xl bg-white p-6">
@@ -8,7 +8,7 @@ export default function SubmitIdeaModal() {
                 <div className="flex justify-between">
                     <h2 className="text-xl font-bold">Submit a New Idea</h2>
 
-                    <button type="button">✕</button>
+                    <button type="button" onClick={onClose}>✕</button>
                 </div>
 
                 <form className="mt-4" action= { createPost }>
@@ -56,6 +56,7 @@ export default function SubmitIdeaModal() {
                     <div className="flex justify-end gap-2">
                         <button
                             type="button"
+                            onClick={onClose}
                             className="rounded-lg border px-4 py-2"
                         >
                             Cancel
