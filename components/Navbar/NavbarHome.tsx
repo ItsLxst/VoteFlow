@@ -1,6 +1,10 @@
+"use client";
 import Image from "next/image";
+import {useState} from "react";
+import SubmitIdeaModal from "@/components/SubmitIdeaModal/SubmitIdeaModal";
 
 function NavbarHome() {
+    const [isModalOpen, setIsModalOpen] = useState(false);
     return (
         <nav className="w-full border-b border-gray-200 py-4">
             <div className="w-full max-w-4xl mx-auto flex items-center justify-between px-4">
@@ -14,10 +18,11 @@ function NavbarHome() {
                     <span className="text-lg font-bold text-gray-900">Voteflow</span>
                 </div>
 
-                <button className="bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold px-4 py-2 rounded-lg">
+                <button onClick={() => setIsModalOpen(true)} className="bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold px-4 py-2 rounded-lg">
                     + Submit Idea
                 </button>
             </div>
+            {isModalOpen && <SubmitIdeaModal />}
         </nav>
     );
 }

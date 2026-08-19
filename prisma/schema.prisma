@@ -11,7 +11,7 @@ model Post {
   title          String
   description    String
   category       String
-  status         String
+  status         String    @default("PENDING")
   votes          Int       @default(0)
   tags           String[]
   authorName     String

@@ -1,3 +1,5 @@
+import {createPost} from "@/app/actions/postActions";
+
 export default function SubmitIdeaModal() {
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-black/30 backdrop-blur-sm">
@@ -9,10 +11,11 @@ export default function SubmitIdeaModal() {
                     <button type="button">✕</button>
                 </div>
 
-                <form className="mt-4">
+                <form className="mt-4" action= { createPost }>
                     <div className="mb-4">
                         <label className="text-sm">Title</label>
                         <input
+                            name="title"
                             type="text"
                             placeholder="e.g. Add Dark Mode"
                             className="w-full rounded-lg border p-2"
@@ -21,7 +24,8 @@ export default function SubmitIdeaModal() {
 
                     <div className="mb-4">
                         <label className="text-sm">Category</label>
-                        <select className="w-full rounded-lg border p-2">
+                        <select className="w-full rounded-lg border p-2"
+                        name="category">
                             <option>Feature</option>
                             <option>Bug</option>
                             <option>Improvement</option>
@@ -32,6 +36,7 @@ export default function SubmitIdeaModal() {
                     <div className="mb-4">
                         <label className="text-sm">Description</label>
                         <textarea
+                            name="description"
                             rows={4}
                             placeholder="Explain the idea or problem..."
                             className="w-full rounded-lg border p-2"
@@ -41,6 +46,7 @@ export default function SubmitIdeaModal() {
                     <div className="mb-4">
                         <label className="text-sm">Your Name</label>
                         <input
+                            name="authorName"
                             type="text"
                             placeholder="e.g. Alex Morgan"
                             className="w-full rounded-lg border p-2"
