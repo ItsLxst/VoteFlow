@@ -1,8 +1,14 @@
+"use client";
+
+import {createComment} from "@/app/actions/commentActions";
+import { useState } from "react";
+
 interface FeedbackDetailProps {
     feedback: any;
 }
 
 function FeedbackDetail({ feedback }: FeedbackDetailProps) {
+    const [content, setContent] = useState("");
     return (
         <div className="flex flex-col gap-6 w-full mt-6">
             {/* main detail card */}
@@ -88,6 +94,8 @@ function FeedbackDetail({ feedback }: FeedbackDetailProps) {
                 {/* comment form*/}
                 <div className="flex flex-col p-4 bg-white border border-gray-200 rounded-2xl gap-3">
                     <textarea
+                        onChange={(e) => setContent(e.target.value)}
+                        value={content}
                         placeholder="Share your thoughts or use case..."
                         rows={3}
                         className="w-full text-sm text-gray-700 outline-none resize-none placeholder-gray-400"
@@ -96,7 +104,13 @@ function FeedbackDetail({ feedback }: FeedbackDetailProps) {
                         <span className="text-xs text-gray-400">
                             Cmd+Enter to submit
                         </span>
-                        <button className="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold px-4 py-2 rounded-lg flex items-center gap-1.5">
+                        <button
+                            onClick={async () => {
+                                await createComment(feedback.id, content);
+                                setContent("");
+                            }}
+                            className="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold px-4 py-2 rounded-lg flex items-center gap-1.5"
+                        >
                             <span>✈</span> Post Comment
                         </button>
                     </div>
