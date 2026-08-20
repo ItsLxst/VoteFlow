@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma";
 
 async function Home() {
     const posts = await prisma.post.findMany({
+        orderBy: { id: 'asc' },
         include: {
             comments: true
         }

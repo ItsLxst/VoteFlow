@@ -16,7 +16,7 @@ async function DetailPage({params}: PageProps) {
     // send to prisma -> db look at the id
     const feedback = await prisma.post.findUnique({
         where: {
-            id: idNum
+            id: idNum,
         },
         include: {
             comments: true // include the comment relationship
