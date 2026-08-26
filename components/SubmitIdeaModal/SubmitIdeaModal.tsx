@@ -1,4 +1,5 @@
 import {createPost} from "@/app/actions/postActions";
+import { useFormStatus} from "react-dom";
 
 export default function SubmitIdeaModal({ onClose }: { onClose: () => void } ) {
     return (
@@ -61,17 +62,24 @@ export default function SubmitIdeaModal({ onClose }: { onClose: () => void } ) {
                         >
                             Cancel
                         </button>
-
-                        <button
-                            type="submit"
-                            className="rounded-lg bg-indigo-600 px-4 py-2 text-white hover:bg-indigo-700"
-                        >
-                            Submit Idea
-                        </button>
+                        <SubmitButton />
                     </div>
                 </form>
 
             </div>
         </div>
+    );
+}
+
+function SubmitButton() {
+    const { pending } = useFormStatus();
+    return (
+        <button
+            type="submit"
+            disabled={pending}
+            className="rounded-lg bg-indigo-600 px-4 py-2 text-white hover:bg-indigo-700"
+        >
+            {pending ? "Pending..." : "Submit Idea"}
+        </button>
     );
 }

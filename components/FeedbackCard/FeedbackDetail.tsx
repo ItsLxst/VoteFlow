@@ -2,6 +2,7 @@
 
 import {createComment} from "@/app/actions/commentActions";
 import { useState } from "react";
+import { useFormStatus } from "react-dom";
 
 interface FeedbackDetailProps {
     feedback: any;
@@ -9,6 +10,12 @@ interface FeedbackDetailProps {
 
 function FeedbackDetail({ feedback }: FeedbackDetailProps) {
     const [content, setContent] = useState("");
+
+    async function handleCommentSubmit(formData: FormData) {
+        const commentContent = formData.get("content") as string;
+        await createComment(feedback.id, commentContent);
+        setContent("");
+    }
     return (
         <div className="flex flex-col gap-6 w-full mt-6">
             {/* main detail card */}
@@ -93,31 +100,39 @@ function FeedbackDetail({ feedback }: FeedbackDetailProps) {
 
                 {/* comment form*/}
                 <div className="flex flex-col p-4 bg-white border border-gray-200 rounded-2xl gap-3">
-                    <textarea
-                        onChange={(e) => setContent(e.target.value)}
-                        value={content}
-                        placeholder="Share your thoughts or use case..."
-                        rows={3}
-                        className="w-full text-sm text-gray-700 outline-none resize-none placeholder-gray-400"
-                    />
-                    <div className="flex items-center justify-between pt-2 border-t border-gray-100">
-                        <span className="text-xs text-gray-400">
-                            Cmd+Enter to submit
-                        </span>
-                        <button
-                            onClick={async () => {
-                                await createComment(feedback.id, content);
-                                setContent("");
-                            }}
-                            className="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold px-4 py-2 rounded-lg flex items-center gap-1.5"
-                        >
-                            <span>✈</span> Post Comment
-                        </button>
+                    <form action={handleCommentSubmit} className="flex flex-col p-4 bg-white border border-gray-200 rounded-2xl gap-3">
+                        <textarea
+                            name="content"
+                            onChange={(e) => setContent(e.target.value)}
+                            value={content}
+                            placeholder="Share your thoughts or use case..."
+                            rows={3}
+                            className="w-full text-sm text-gray-700 outline-none resize-none placeholder-gray-400"
+                        />
+                                            <div className="flex items-center justify-between pt-2 border-t border-gray-100">
+                            <span className="text-xs text-gray-400">
+                                Cmd+Enter to submit
+                            </span>
+                            <SubmitButton />
+                        </div>
+                    </form>
                     </div>
                 </div>
             </div>
-        </div>
     );
 }
 
 export default FeedbackDetail;
+
+function SubmitButton() {
+    const { pending } = useFormStatus();
+    return (
+        <button
+            type="submit"
+            disabled={pending}
+            className="rounded-lg bg-indigo-600 px-4 py-2 text-white hover:bg-indigo-700"
+        >
+            {pending ? "Pending..." : "Post Comment"}
+        </button>
+    );
+}
