@@ -1,6 +1,7 @@
 "use client";
 import { upvotePost } from "@/app/actions/upvoteActions";
 import { useState } from "react";
+import { useOptimistic, startTransition } from 'react';
 
 interface FeedbackCardProps {
     feedback: any;
@@ -8,14 +9,21 @@ interface FeedbackCardProps {
 
 function FeedbackCard({ feedback }: FeedbackCardProps) {
     const [isUpvoted, setIsUpvoted] = useState(false);
+    const [optimisticVotes, setOptimisticVotes] = useOptimistic(
+        feedback.votes,
+        (currentVotes, isRemoving) => isRemoving ? currentVotes - 1 : currentVotes + 1
+    );
 
     return (
         <div className="flex flex-col gap-4 w-full mt-6">
             <div className="group flex items-start gap-5 p-6 bg-white border border-gray-200 hover:border-gray-300 rounded-2xl cursor-pointer transition-colors">
                 <button
                     onClick={() => {
-                        upvotePost(feedback.id, isUpvoted);
-                        setIsUpvoted(!isUpvoted);
+                        startTransition(() => {
+                            setOptimisticVotes(isUpvoted);
+                            upvotePost(feedback.id, isUpvoted);
+                            setIsUpvoted(!isUpvoted);
+                        });
                     }}
                     className={`flex flex-col items-center justify-center w-14 h-24 rounded-2xl shrink-0 transition-colors ${
                         isUpvoted
@@ -23,7 +31,7 @@ function FeedbackCard({ feedback }: FeedbackCardProps) {
                             : "bg-white text-gray-800 border border-gray-200 hover:bg-indigo-50 hover:text-indigo-600"
                     }`}>
                     <span className="text-xs">▲</span>
-                    <span className="text-sm font-bold mt-2">{feedback.votes}</span>
+                    <span className="text-sm font-bold mt-2">{optimisticVotes}</span>
                 </button>
 
                 <div className="flex flex-col flex-1 gap-2">
