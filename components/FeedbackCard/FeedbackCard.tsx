@@ -5,10 +5,11 @@ import { useOptimistic, startTransition } from 'react';
 
 interface FeedbackCardProps {
     feedback: any;
+    initialIsUpvoted: boolean;
 }
 
-function FeedbackCard({ feedback }: FeedbackCardProps) {
-    const [isUpvoted, setIsUpvoted] = useState(false);
+function FeedbackCard({ feedback, initialIsUpvoted }: FeedbackCardProps) {
+    const [isUpvoted, setIsUpvoted] = useState(initialIsUpvoted);
     const [optimisticVotes, setOptimisticVotes] = useOptimistic(
         feedback.votes,
         (currentVotes, isRemoving) => isRemoving ? currentVotes - 1 : currentVotes + 1
@@ -21,7 +22,7 @@ function FeedbackCard({ feedback }: FeedbackCardProps) {
                     onClick={() => {
                         startTransition(() => {
                             setOptimisticVotes(isUpvoted);
-                            upvotePost(feedback.id, isUpvoted);
+                            upvotePost(feedback.id);
                             setIsUpvoted(!isUpvoted);
                         });
                     }}

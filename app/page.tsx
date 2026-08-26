@@ -2,6 +2,7 @@ import NavbarHome from "@/components/Navbar/NavbarHome";
 import StatsOverview from "@/components/StatsOverview/StatsOverview";
 import FeedbackCard from "@/components/FeedbackCard/FeedbackCard";
 import { prisma } from "@/lib/prisma";
+import { cookies } from "next/headers";
 
 interface PageProps {
     searchParams: Promise<{
@@ -19,6 +20,18 @@ async function Home({ searchParams }: PageProps) {
             comments: true,
         },
     });
+
+    const cookieStore = await cookies();
+    const visitorId = cookieStore.get("visitorId")?.value;
+
+    const myVotes = visitorId
+        ? await prisma.vote.findMany({
+            where: { visitorId },
+            select: { postId: true },
+        })
+        : [];
+
+    const votedPostIds = new Set(myVotes.map((v: { postId: number }) => v.postId));
 
     const total = allPosts.length;
     const underReview = allPosts.filter((p) => p.status === "Under Review").length;
@@ -44,7 +57,11 @@ async function Home({ searchParams }: PageProps) {
                     activeCategory={category || "All"}
                 />
                 {filteredPosts.map((post) => (
-                    <FeedbackCard key={post.id} feedback={post} />
+                    <FeedbackCard
+                        key={post.id}
+                        feedback={post}
+                        initialIsUpvoted={votedPostIds.has(post.id)}
+                    />
                 ))}
             </main>
         </div>
