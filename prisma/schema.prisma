@@ -18,6 +18,7 @@ model Post {
   authorInitials String
   createdAt      DateTime  @default(now())
   comments       Comment[]
+  votesList      Vote[]
 }
 
 model Comment {
@@ -28,4 +29,13 @@ model Comment {
   createdAt      DateTime @default(now())
   postId         Int
   post           Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+}
+
+model Vote {
+  id         Int    @id @default(autoincrement())
+  visitorId  String
+  postId     Int
+  post       Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@unique([visitorId, postId])
 }
