@@ -10,9 +10,10 @@ A public feedback & upvote board where users can submit ideas, vote on them, and
 
 - Browse feedback posts with title, description, category, status, and vote count
 - Filter by category and search by title — both reflected in the URL (`?category=...&query=...`) so filtered views are shareable/bookmarkable
-- Submit new ideas through a modal form, written directly to PostgreSQL via a Next.js Server Action
-- Upvote posts via a Server Action — the button state updates instantly, and the vote count refreshes once the page revalidates
-- Post detail pages with comments; adding a comment updates the thread immediately
+- Submit new ideas through a modal form, written directly to PostgreSQL via a Next.js Server Action, with a pending state on the submit button
+- Upvote posts with true optimistic UI (`useOptimistic`) — the vote count updates instantly on click, before the server confirms
+- Per-visitor vote tracking via a persistent cookie identity and a `Vote` model — duplicate voting is prevented and vote state survives page reloads
+- Post detail pages with comments; adding a comment updates the thread immediately with a pending state on submit
 - Dashboard stats: total posts, under review, in progress, and completed counts
 
 ---
@@ -71,18 +72,15 @@ Open `http://localhost:3000` in your browser.
 
 ## 📚 What I Learned
 
-- Using Next.js Server Actions for mutations (creating posts, upvoting, adding comments) instead of building separate API routes
-- Modeling a one-to-many relation with Prisma (`Post` ↔ `Comment`, with cascade delete)
-- Building shareable, URL-driven filters with Next.js `searchParams` instead of client-side-only state
-- Using `revalidatePath` to refresh server-rendered data after a mutation
+- Using `useOptimistic` for instant UI feedback ahead of server confirmation
+- Managing anonymous, persistent user identity with cookies set in Next.js middleware
+- Modeling a many-to-many-style relation with a unique constraint (`Vote`) to enforce one-vote-per-visitor at the database level
+- Using `useFormStatus` to show pending states during form submission
 
 ---
 
 ## 🔮 Future Improvements
 
-- [ ] Add real user authentication — comments currently post under a hardcoded name, and votes aren't tied to a user
-- [ ] Add a proper `Vote` model (`User` ↔ `Post` ↔ `Vote`) instead of a simple counter, to prevent duplicate voting
-- [ ] Make the vote count update instantly on click (true optimistic UI) instead of waiting for page revalidation
-- [ ] Add loading/pending states to the submit-idea and comment forms
+- [ ] Add real user authentication (currently identity is anonymous, cookie-based)
 - [ ] Add pagination for posts as the board grows
 - [ ] Add tests
